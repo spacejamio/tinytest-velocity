@@ -14,6 +14,8 @@ Package.onUse(function (api) {
 
   api.use('velocity:core');
 
+  api.imply('spacejamio:test-in-velocity');
+
   api.imply('velocity:html-reporter', 'client');
 
   api.addFiles([
