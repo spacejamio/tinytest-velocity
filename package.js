@@ -1,3 +1,7 @@
+Npm.depends({
+  'spacejam': '1.1.0'
+});
+
 Package.describe({
   name: "spacejamio:tinytest-velocity",
   summary: "Runs your tinytest and munit package tests with your app and reports the results to velocity.",
