@@ -1,12 +1,24 @@
-class Spacejam
+spacejamExports = Npm.require('spacejam')
+log.info spacejamExports
+
+class SpacejamRunner
 
   instance = null
 
+  spacejam: null
+
   @get: ->
-    instance ?= new Spacejam()
+    instance ?= new SpacejamRunner()
 
   constructor: ->
+    spacejam = new Spacejam()
     Velocity.registerTestingFramework 'tinytest', {}
+    Meteor.startup =>
+      @testInVelocity()
 
 
-Spacejam.get()
+  testInVelocity: ->
+    spacejam.testInVelocity()
+
+
+SpacejamRunner.get()
