@@ -1,5 +1,5 @@
 Npm.depends({
-  'spacejam': '1.1.0'
+  'spacejam': '1.1.0-rc6'
 });
 
 Package.describe({
@@ -18,13 +18,13 @@ Package.onUse(function (api) {
 
   api.use('velocity:core');
 
-  api.imply('spacejamio:test-in-velocity');
+  api.use(['spacejamio:loglevel', 'spacejamio:chai']);
 
   api.imply('velocity:html-reporter', 'client');
 
-  api.addFiles([
-    'Spacejam.coffee'
-  ], 'server');
+  api.addFiles('PackagesTester.coffee', 'server');
+
+  api.export('PackagesTester', 'server');
 });
 
 Package.onTest(function (api) {
@@ -32,7 +32,5 @@ Package.onTest(function (api) {
   // that tinytest and the driver both implement?
   api.use(['coffeescript', 'spacejamio:tinytest-velocity', 'spacejamio:munit']);
 
-  api.addFiles([
-    'tests/SpacejamTest.coffee'
-  ], 'server');
+  api.addFiles('tests/PackagesTesterTest.coffee', 'server');
 });

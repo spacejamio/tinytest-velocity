@@ -1,0 +1,13 @@
+{
+  "loglevel": "debug",
+  "packages": {
+    "spacejamio": {
+      "tinytest-velocity": {
+        "packagesToTest": ["tinytests"]
+      }
+    }
+  },
+  "public": {
+    "loglevel": "debug"
+  }
+}
