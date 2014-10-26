@@ -2,6 +2,10 @@ Tinytest.add 'passing test', (test)->
   console.log 'passing test'
   test.isTrue true
 
+Tinytest.add 'passing test2', (test)->
+  console.log 'passing test'
+  test.isTrue true
+
 Tinytest.add 'failing test', (test)->
   console.log 'failing test'
   test.isTrue false, 'failing test message'
@@ -23,16 +27,6 @@ Tinytest.addAsync 'async failing test', (test, done)->
     done()
 
 Tinytest.addAsync 'async throwing test', (test, done)->
-  console.log 'async throwing test'
-  Meteor.defer ->
-    try
-      throw new Error('async throwing test message')
-      done()
-    catch err
-      test.exception(err)
-
-
-Tinytest.addAsync 'async throwing test2', (test, done)->
   console.log 'async throwing test'
   Meteor.defer ->
     try

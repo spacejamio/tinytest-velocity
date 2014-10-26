@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "spacejam": {
-      "version": "1.1.0-rc6",
+      "version": "1.1.0-rc8",
       "dependencies": {
         "underscore": {
           "version": "1.7.0"
@@ -105,10 +105,10 @@
               }
             },
             "mkdirp": {
-              "version": "http://localhost:4873/mkdirp/-/mkdirp-0.3.5.tgz"
+              "version": "0.3.5"
             },
             "request": {
-              "version": "http://localhost:4873/request/-/request-2.36.0.tgz",
+              "version": "2.36.0",
               "dependencies": {
                 "qs": {
                   "version": "0.6.6"

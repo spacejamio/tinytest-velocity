@@ -3,6 +3,7 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
+  api.use(['coffeescript', 'meteor']);
 });
 
 Package.onTest(function (api) {

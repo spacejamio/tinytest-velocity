@@ -1,9 +1,11 @@
 {
   "loglevel": "debug",
   "packages": {
-    "spacejamio": {
+    "practicalmeteor": {
       "tinytest-velocity": {
-        "packagesToTest": ["tinytests"]
+        "spacejamOptions": {
+          "packages": ["tinytests"]
+        }
       }
     }
   },

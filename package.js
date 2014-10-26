@@ -1,5 +1,5 @@
 Npm.depends({
-  'spacejam': '1.1.0-rc6'
+  'spacejam': '1.1.0-rc8'
 });
 
 Package.describe({
@@ -8,6 +8,7 @@ Package.describe({
   git: "https://github.com/spacejamio/tinytest-velocity.git",
   version: '0.1.0'
 });
+
 
 Package.onUse(function (api) {
   // XXX this should go away, and there should be a clean interface
@@ -22,15 +23,20 @@ Package.onUse(function (api) {
 
   api.imply('velocity:html-reporter', 'client');
 
-  api.addFiles('PackagesTester.coffee', 'server');
+  api.addFiles([
+    'src/server/log.js',
+    'src/server/Pipe.coffee',
+    'src/server/ChildProcess.coffee',
+    'src/server/Spacejam.coffee'], 'server');
 
-  api.export('PackagesTester', 'server');
+  api.export('TestPackages', 'server');
 });
+
 
 Package.onTest(function (api) {
   // XXX this should go away, and there should be a clean interface
   // that tinytest and the driver both implement?
   api.use(['coffeescript', 'spacejamio:tinytest-velocity', 'spacejamio:munit']);
 
-  api.addFiles('tests/PackagesTesterTest.coffee', 'server');
+  api.addFiles('tests/server/SpacejamTest.coffee', 'server');
 });
