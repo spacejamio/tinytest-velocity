@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "spacejam": {
-      "version": "1.1.0-rc8",
+      "version": "1.1.0-rc9",
       "dependencies": {
         "underscore": {
           "version": "1.7.0"
@@ -24,7 +24,7 @@
           }
         },
         "loglevel": {
-          "version": "http://localhost:4873/loglevel/-/loglevel-1.1.0.tgz"
+          "version": "1.1.0"
         },
         "glob": {
           "version": "4.0.6",

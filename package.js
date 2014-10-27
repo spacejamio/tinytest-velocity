@@ -19,7 +19,7 @@ Package.onUse(function (api) {
 
   api.use(['velocity:core', 'velocity:shim']);
 
-  api.use(['spacejamio:loglevel', 'spacejamio:chai']);
+  api.use(['spacejamio:loglevel@1.1.0_2', 'spacejamio:chai']);
 
   api.imply('velocity:html-reporter', 'client');
 
