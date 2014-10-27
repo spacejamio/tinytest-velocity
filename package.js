@@ -1,5 +1,5 @@
 Npm.depends({
-  'spacejam': '1.1.0-rc8'
+  'spacejam': '1.1.0-rc9'
 });
 
 Package.describe({
