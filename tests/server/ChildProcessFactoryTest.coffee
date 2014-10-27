@@ -2,21 +2,13 @@ if ! process.env.TEST_IN_VELOCITY
   path = Npm.require('path')
   fs = Npm.require('fs')
 
-  Spacejam = practical.Spacejam
+  Factory = practical.ChildProcessFactory
 
-  log = loglevel.createLogger("SpacejamTest", 'trace')
-  log.debug "Test logger created"
-
-  describe 'Spacejam', ->
+  describe 'TestPackages', ->
 
     spacejam = null
 
     spawnStub = null
-
-    appPath = null
-
-    beforeAll ->
-      appPath = practical.ChildProcessFactory.get().getMeteorAppPath()
 
     beforeEach ->
       delete Meteor.settings?.packages?.practicalmeteor?["tinytest-velocity"]?.spacejamOptions
@@ -25,7 +17,6 @@ if ! process.env.TEST_IN_VELOCITY
       spawnStub?.restore() if spawnStub?.restore?
       spawnStub = sinon.stub()
       spawnStub.returns {
-        pid: 60000
         on: ->
         stdout:
           setEncoding: ->
@@ -47,15 +38,22 @@ if ! process.env.TEST_IN_VELOCITY
       spies.restoreAll()
       spawnStub?.restore() if spawnStub?.restore?
 
-    it 'getSpacejamPath should return the path to spacjam in .meteor/local', ()->
-      spacejamPath = Spacejam.getSpacejamPath(appPath)
+    describe 'getMeteorAppPath', ->
+      it 'should get the meteor app folder', ()->
+        dir = TestPackages.getMeteorAppPath()
+        expect(fs.existsSync(dir)).to.be.true
+        expect(fs.existsSync(dir + '/.meteor')).to.be.true
+
+    it 'getSpacejamPath() should return the path to spacjam in .meteor/local', ()->
+      appPath = TestPackages.getMeteorAppPath()
+      spacejamPath = TestPackages.getSpacejamPath(appPath)
       expect(fs.existsSync(spacejamPath)).to.be.true
 
 
     describe 'getSpawnArgs', ->
       it 'should have only a test-in-velocity argument, if no options are specified', ()->
-        args = Spacejam.getSpawnArgs()
-        expect(args).to.deep.equal ['test-in-velocity']
+        args = TestPackages.getSpawnArgs()
+        expect(args).to.deep.equal ['test-in-velocity', '--pid-file', TestPackages.getPidPath()]
 
       it 'should include all options from Meteor.settings', ()->
         spacejamOptions =
@@ -73,32 +71,35 @@ if ! process.env.TEST_IN_VELOCITY
         Meteor.settings = {} if not Meteor.settings?
 
         _.extend Meteor.settings, packageSettings
-        args = Spacejam.getSpawnArgs()
-        expect(args).to.deep.equal ['test-in-velocity', '--production', 'true', '--release', '0.9.4', "--root-url", "http://myym:3000/", 'pkg1', 'pkg2']
+        args = TestPackages.getSpawnArgs()
+        expect(args).to.deep.equal ['test-in-velocity', '--pid-file', TestPackages.getPidPath(), '--production', 'true', '--release', '0.9.4', "--root-url", "http://myym:3000/", 'pkg1', 'pkg2']
+
+    it 'getSpawnOptions() should return the correct spawn options', ()->
+      appPath = TestPackages.getMeteorAppPath()
+      spawnOptions = TestPackages.getSpawnOptions(appPath)
+      expectedSpawnOptions =
+        cwd: appPath
+        env: process.env
+        detached: false
+
+      expect(spawnOptions).to.deep.equal expectedSpawnOptions
 
     describe 'testInVelocity', ->
 
       it 'should call spawn with the correct arguments', ->
-        log.debug 'testing spawn'
-        spacejam = new Spacejam()
+
+        spacejam = new TestPackages()
         spacejam.testInVelocity()
+        appPath = TestPackages.getMeteorAppPath()
+        expect(spawnStub).to.have.been.calledWithExactly TestPackages.getSpacejamPath(appPath),
+          TestPackages.getSpawnArgs(appPath), TestPackages.getSpawnOptions(appPath)
 
-        appPath = practical.ChildProcessFactory.get().getMeteorAppPath()
-        log.debug "appPath=#{appPath}"
-        fout = practical.ChildProcessFactory.get().fout
-        expectedSpawnOptions =
-          cwd: appPath
-          env: process.env,
-          detached: true,
-          stdio: [ 'ignore', fout, fout ]
 
-        expect(spawnStub).to.have.been.calledWithExactly Spacejam.getSpacejamPath(appPath),
-          Spacejam.getSpawnArgs(), expectedSpawnOptions
-
+    describe 'testInVelocity', ->
 
       it 'should not call spawn if spacejam is already running', ->
-        delete practical.ChildProcessFactory.get().child
-        fs.writeFileSync(practical.ChildProcessFactory.get().pidDirPath + '/spacejam.pid', "#{process.pid}")
-        spacejam = new Spacejam()
+        fs.writeFileSync(TestPackages.getPidPath(), "#{process.pid}")
+        spacejam = new TestPackages()
         spacejam.testInVelocity()
+        appPath = TestPackages.getMeteorAppPath()
         expect(spawnStub).to.have.not.been.called

@@ -17,7 +17,7 @@ Package.onUse(function (api) {
   api.use('underscore');
   api.use('coffeescript');
 
-  api.use('velocity:core');
+  api.use(['velocity:core', 'velocity:shim']);
 
   api.use(['spacejamio:loglevel', 'spacejamio:chai']);
 
@@ -26,7 +26,7 @@ Package.onUse(function (api) {
   api.addFiles([
     'src/server/log.js',
     'src/server/Pipe.coffee',
-    'src/server/ChildProcess.coffee',
+    'src/server/ChildProcessFactory.coffee',
     'src/server/Spacejam.coffee'], 'server');
 
   api.export('TestPackages', 'server');
@@ -36,7 +36,7 @@ Package.onUse(function (api) {
 Package.onTest(function (api) {
   // XXX this should go away, and there should be a clean interface
   // that tinytest and the driver both implement?
-  api.use(['coffeescript', 'spacejamio:tinytest-velocity', 'spacejamio:munit']);
+  api.use(['coffeescript', 'spacejamio:tinytest-velocity', 'spacejamio:loglevel', 'spacejamio:munit']);
 
   api.addFiles('tests/server/SpacejamTest.coffee', 'server');
 });

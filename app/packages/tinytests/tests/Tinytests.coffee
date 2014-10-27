@@ -2,10 +2,6 @@ Tinytest.add 'passing test', (test)->
   console.log 'passing test'
   test.isTrue true
 
-Tinytest.add 'passing test2', (test)->
-  console.log 'passing test'
-  test.isTrue true
-
 Tinytest.add 'failing test', (test)->
   console.log 'failing test'
   test.isTrue false, 'failing test message'
